@@ -63,16 +63,6 @@ app.onStopButton = function()
 	$('#found-devices').empty();
 };
 
-/**
- * Print debug info to console and application UI.
- */
-app.showInfo = function(info)
-{
-	document.getElementById('info').innerHTML = info;
-	console.log(info);
-};
-
-
 //We only want to read one Device
 app.deviceIsBluetoothWithBleId = function(device, bleId)
 {
@@ -96,16 +86,21 @@ app.connect = function(user)
 		{
 
 			// Debug logging.
-			console.log('Device Found!')
-			console.log(device.name + ' : ' + device.address.toString().split(':').join(''))
+			console.log('Device Found!');
+			console.log(device.name + ' : ' + device.address.toString().split(':').join(''));
+			app.showInfo('Connected to <i>' + device.name + '</i>');
+			app.device = device;
 
 			// Add found device to device list.
 			// See documentation here for BLE device object fields:
 			// http://evothings.com/doc/raw/plugins/com.evothings.ble/com.evothings.module_ble.html
 			var Name = device.name;
-			var HEXdata = app.getHexData(device.advertisementData.kCBAdvDataManufacturerData);
 			document.getElementById('devicename').innerHTML = String(Name);
-			document.getElementById('devicehex').innerHTML = String(Hexdata);
+			app.readValues(device);
+
+			document.getElementById('deviceinfo').style.display = 'block';
+
+			app.interval = setInterval(function() { app.readValues(device); }, 500);
 
 		};
 
@@ -150,24 +145,23 @@ app.connect = function(user)
 };
 
 // Something like this happens but with hex----------------------------------------------
-// app.readTemperature = function()
-// {
-// 	function onDataReadSuccess(data)
-// 	{
-// 		var temperatureData = new Uint8Array(data);
-// 		var temperature = temperatureData[0];
-// 		console.log('Temperature read: ' + temperature + ' C');
-// 		document.getElementById('temperature').innerHTML = temperature;
-// 	}
-
-// 	function onDataReadFailure(errorCode)
-// 	{
-// 		console.log('Failed to read temperature with error: ' + errorCode);
-// 		app.disconnect();
-// 	}
-
-// 	app.readDataFromScratch(2, onDataReadSuccess, onDataReadFailure);
-// };
+app.readValues = function(device)
+{
+	var HEXdata = app.getHexData(device.advertisementData.kCBAdvDataManufacturerData);
+	var bath = parseInt(String(HEXdata.slice(4,6)),16);
+	var heater1 = parseInt(String(HEXdata.slice(6,8)),16);
+	var heater2 = parseInt(String(HEXdata.slice(8,10)),16);
+	var board = parseInt(String(HEXdata.slice(10,12)),16);
+	var rpm = parseInt(String(HEXdata.slice(12,16)),16);
+	var pwm = parseInt(String(HEXdata.slice(16,18)),16);
+	document.getElementById('devicebath').innerHTML = bath;
+	document.getElementById('deviceheater1').innerHTML = heater1;
+	document.getElementById('deviceheater2').innerHTML = heater2;
+	document.getElementById('deviceboard').innerHTML = board;
+	document.getElementById('devicerpm').innerHTML = rpm;
+	document.getElementById('devicepwm').innerHTML = pwm;
+	console.log('updating values');
+}
 
 /**
  * Convert hex to ASCII strings.
@@ -204,6 +198,35 @@ app.getHexData = function(data)
     {
     	return null;
     }
+};
+
+app.disconnect = function(user)
+{
+	// If timer configured, clear.
+	if (app.interval)
+	{
+		clearInterval(app.interval);
+	}
+
+	app.connected = false;
+	app.device = null;
+	// Stop any ongoing scan and close devices.
+	evothings.easyble.stopScan();
+	evothings.easyble.closeConnectedDevices();
+
+	// Update user interface
+	app.showInfo('Not connected');
+	document.getElementById('BLEButton').innerHTML = 'Connect';
+	document.getElementById('BLEButton').onclick = new Function('app.connect()');
+};
+
+/**
+ * Print debug info to console and application UI.
+ */
+app.showInfo = function(info)
+{
+	document.getElementById('info').innerHTML = info;
+	console.log(info);
 };
 
 // Initialize the app.

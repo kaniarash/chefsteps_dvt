@@ -58,7 +58,9 @@ section::after {
 	display: none;
 }
 
-
+.devicetitle{
+	color: gray;
+}
 
 
 /*  ----------------------------------------------------------
@@ -595,6 +597,24 @@ input.btn-group.red:active + label,
 input.btn-group:checked + label.red,
 input.btn-group.red:checked + label {
 	background-color: #cb414b;
+}
+
+/*  Color: "ChefSteps Orange"
+	Class name: CSorange
+    ---------------- */
+.color_CSorange { color: #FF674D; }
+.bg_red, input.CSorange, button.CSorange, ul.CSorange li, label.CSorange,
+input.CSorange + label {
+	background-color: #FF674D;
+}
+/* Downpressed button. */
+button.CSorange:active, button.CSorange.pressed,
+/* Input element with adjacent label. */
+input.btn-group:active + label.CSorange,
+input.btn-group.CSorange:active + label,
+input.btn-group:checked + label.CSorange,
+input.btn-group.CSorange:checked + label {
+	background-color: #f85e42;
 }
 
 /*  Color: "Bright Light"

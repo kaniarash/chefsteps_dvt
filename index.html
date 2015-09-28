@@ -24,7 +24,7 @@ Credits:
 	<meta name="viewport" content="width=device-width, user-scalable=no
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>mbed Evothings GAP</title>
+	<title>Chefsteps DVT</title>
 
 	<style>
 		@import 'ui/css/evothings-app.css';
@@ -55,24 +55,21 @@ Credits:
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 	<!-- new interface -->
-	<h1>Chefsteps mbed Read</h1>
+	<h1>Chefsteps DVT</h1>
 
 	<h2>Enter the name of your Bluetooth device</h2>
 
-	<input id="BLEId" value="Name" type="url">
+	<input id="BLEId" value="Joule" type="url">
 
 	<button id="BLEButton" class="CSorange" onclick="app.connect()">CONNECT</button>
 	<br />
-
-	<p><b>Status:</b> <span id="BLEStatus">Not connected</span></p>
 	<!-- end new interface -->
 
 	<!-- <button onclick="app.onStartButton()" class="green">Start</button> -->
 	<button onclick="app.onStopButton()" class="charcoal">Stop</button>
 
 	<p id="info">Initializing...</p>
-
-	<h2>Info</h2>
+<!-- 	<h2>Info</h2>
 
 	<p>
 		This app scans all nearby BLE devices and displays their GAP
@@ -81,11 +78,15 @@ Credits:
 		custom GAP mbed code</a>. The mbed code demonstrates how to use GAP on the
 		microcontroller side to broadcast data. This application reads and displays
 		the data for all named GAP devices in range.
-	</p>
-
-	<span class="deviceinfo">
-		Name: <span id="devicename">
-		Hex: <span id="devicehex">
+	</p> -->
+	<span id="deviceinfo" style="display: none;">
+		<div class="devicerow"> <span class="devicetitle">Name:</span> <span id="devicename"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Bath Temp:</span> <span id="devicebath"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Heater 1 Temp:</span> <span id="deviceheater1"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Heater 2 Temp:</span> <span id="deviceheater2"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Board Temp:</span> <span id="deviceboard"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Motor RPM:</span> <span id="devicerpm"></span></div>
+		<div class="devicerow"> <span class="devicetitle">Heater PWM:</span> <span id="devicepwm"></span></div>
 	</span>
 
 </body>
